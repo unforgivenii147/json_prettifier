@@ -1,6 +1,8 @@
 README.md
 setup.cfg
 setup.py
+src/json_prettifier/__init__.py
+src/json_prettifier/cli.py
 src/json_prettifier.egg-info/PKG-INFO
 src/json_prettifier.egg-info/SOURCES.txt
 src/json_prettifier.egg-info/dependency_links.txt

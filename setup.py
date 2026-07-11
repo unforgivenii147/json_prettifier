@@ -7,7 +7,7 @@ setup(
     name="json_prettifier",
     version="1.4.7",
     author="Isaac Onsgh",
-    author_email="adnsnonagh@gmsil.com",
+    author_email="adnanonagh@gmail.com",
     description="A fast JSON prettifier and minifier with multiprocessing support",
     long_description=long_description,
     long_description_content_type="text/markdown",

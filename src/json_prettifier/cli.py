@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """CLI for JSON prettifier/minifier with multiprocessing support."""
 
 import argparse

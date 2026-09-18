@@ -22,6 +22,7 @@ import json_prettifier as jb
 # Base class: every test gets its own temp directory
 # ---------------------------------------------------------------------------
 
+
 class FileTestCase(unittest.TestCase):
     def setUp(self) -> None:
         self._tmp = tempfile.TemporaryDirectory()
@@ -40,6 +41,7 @@ class FileTestCase(unittest.TestCase):
 # ---------------------------------------------------------------------------
 # custom_format
 # ---------------------------------------------------------------------------
+
 
 class TestCustomFormat(unittest.TestCase):
     def test_empty_dict(self):
@@ -94,6 +96,7 @@ class TestCustomFormat(unittest.TestCase):
 # _read_text
 # ---------------------------------------------------------------------------
 
+
 class TestReadText(FileTestCase):
     def test_small_file(self):
         p = self.write("small.json", '{"a": 1}')
@@ -114,6 +117,7 @@ class TestReadText(FileTestCase):
 # ---------------------------------------------------------------------------
 # _atomic_write
 # ---------------------------------------------------------------------------
+
 
 class TestAtomicWrite(FileTestCase):
     def test_overwrites_content(self):
@@ -148,6 +152,7 @@ class TestAtomicWrite(FileTestCase):
 # ---------------------------------------------------------------------------
 # process_json_file
 # ---------------------------------------------------------------------------
+
 
 class TestProcessJsonFile(FileTestCase):
     def test_beautify(self):
@@ -203,6 +208,7 @@ class TestProcessJsonFile(FileTestCase):
 # is_json_file
 # ---------------------------------------------------------------------------
 
+
 class TestIsJsonFile(FileTestCase):
     def test_json_extension(self):
         p = self.write("a.json", "anything")
@@ -228,6 +234,7 @@ class TestIsJsonFile(FileTestCase):
 # ---------------------------------------------------------------------------
 # collect_json_files
 # ---------------------------------------------------------------------------
+
 
 class TestCollectJsonFiles(FileTestCase):
     def test_explicit_file_is_always_included(self):
@@ -266,6 +273,7 @@ class TestCollectJsonFiles(FileTestCase):
 # ---------------------------------------------------------------------------
 # main (end-to-end)
 # ---------------------------------------------------------------------------
+
 
 class TestMain(FileTestCase):
     def _run(self, argv):

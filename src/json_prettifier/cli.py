@@ -73,13 +73,9 @@ class _StdlibBackend(_Backend):
 
     def dumps(self, obj, *, sort_keys=False, compact=False, indent=None) -> str:
         if indent is not None:
-            return json.dumps(
-                obj, ensure_ascii=False, sort_keys=sort_keys, indent=indent
-            )
+            return json.dumps(obj, ensure_ascii=False, sort_keys=sort_keys, indent=indent)
         if compact:
-            return json.dumps(
-                obj, ensure_ascii=False, separators=(",", ":"), sort_keys=sort_keys
-            )
+            return json.dumps(obj, ensure_ascii=False, separators=(",", ":"), sort_keys=sort_keys)
         return json.dumps(obj, ensure_ascii=False, sort_keys=sort_keys)
 
 
@@ -88,6 +84,7 @@ class _OrjsonBackend(_Backend):
 
     def __init__(self) -> None:
         import orjson  # noqa: WPS433 (deferred import)
+
         self._orjson = orjson
 
     def loads(self, text: str) -> Any:
@@ -110,6 +107,7 @@ class _UjsonBackend(_Backend):
 
     def __init__(self) -> None:
         import ujson  # noqa: WPS433
+
         self._ujson = ujson
 
     def loads(self, text: str) -> Any:
@@ -136,6 +134,7 @@ class _MsgpackBackend(_Backend):
 
     def __init__(self) -> None:
         import msgpack  # noqa: WPS433
+
         self._msgpack = msgpack
 
     def loads(self, text: str) -> Any:
@@ -143,20 +142,14 @@ class _MsgpackBackend(_Backend):
         try:
             return self._msgpack.unpackb(data, raw=False)
         except Exception:
-            return json.loads(
-                data.decode("utf-8") if isinstance(data, bytes) else data
-            )
+            return json.loads(data.decode("utf-8") if isinstance(data, bytes) else data)
 
     def dumps(self, obj, *, sort_keys=False, compact=False, indent=None) -> str:
         # msgpack can't emit JSON — delegate to stdlib for valid JSON output.
         if indent is not None:
-            return json.dumps(
-                obj, ensure_ascii=False, sort_keys=sort_keys, indent=indent
-            )
+            return json.dumps(obj, ensure_ascii=False, sort_keys=sort_keys, indent=indent)
         if compact:
-            return json.dumps(
-                obj, ensure_ascii=False, separators=(",", ":"), sort_keys=sort_keys
-            )
+            return json.dumps(obj, ensure_ascii=False, separators=(",", ":"), sort_keys=sort_keys)
         return json.dumps(obj, ensure_ascii=False, sort_keys=sort_keys)
 
 
@@ -187,16 +180,12 @@ def custom_format(data: Any, sort_keys: bool = False) -> str:
     if isinstance(data, dict) and data:
         items = sorted(data.items()) if sort_keys else data.items()
         inner = ",\n  ".join(
-            f"{_BACKEND.dumps(k, sort_keys=sort_keys)}: "
-            f"{_BACKEND.dumps(v, sort_keys=sort_keys)}"
-            for k, v in items
+            f"{_BACKEND.dumps(k, sort_keys=sort_keys)}: {_BACKEND.dumps(v, sort_keys=sort_keys)}" for k, v in items
         )
         return "{\n  " + inner + "\n}"
 
     if isinstance(data, list) and data:
-        inner = ",\n  ".join(
-            _BACKEND.dumps(v, sort_keys=sort_keys) for v in data
-        )
+        inner = ",\n  ".join(_BACKEND.dumps(v, sort_keys=sort_keys) for v in data)
         return "[\n  " + inner + "\n]"
 
     # Scalars, empty dicts/lists, or None.
@@ -227,9 +216,7 @@ def _atomic_write(path: Path, text: str) -> None:
     """
     original_mode = path.stat().st_mode
 
-    fd, tmp_name = tempfile.mkstemp(
-        dir=path.parent, prefix=f".{path.name}.", suffix=".tmp"
-    )
+    fd, tmp_name = tempfile.mkstemp(dir=path.parent, prefix=f".{path.name}.", suffix=".tmp")
     tmp_path = Path(tmp_name)
     try:
         with os.fdopen(fd, "w", encoding="utf-8") as f:
@@ -266,9 +253,7 @@ def process_json_file(
         elif custom:
             output = custom_format(data, sort_keys=sort_keys)
         else:
-            output = _BACKEND.dumps(
-                data, sort_keys=sort_keys, indent=PRETTY_INDENT
-            )
+            output = _BACKEND.dumps(data, sort_keys=sort_keys, indent=PRETTY_INDENT)
 
         # Always terminate with a trailing newline (POSIX convention).
         _atomic_write(file_path, output + "\n")
@@ -362,8 +347,8 @@ Examples:
         "--custom",
         action="store_true",
         help="Use the custom formatter: only the top-level container is "
-             "exploded across lines; nested values stay inline. "
-             "Implies beautify; ignored when --minify is set.",
+        "exploded across lines; nested values stay inline. "
+        "Implies beautify; ignored when --minify is set.",
     )
     parser.add_argument(
         "-s",
@@ -407,9 +392,7 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     # Sorting gives deterministic, reproducible output ordering.
-    process_args = [
-        (str(f), minify, args.sort_keys, custom) for f in sorted(json_files)
-    ]
+    process_args = [(str(f), minify, args.sort_keys, custom) for f in sorted(json_files)]
 
     # Cap workers so we never spawn more than we have work for.
     workers = min(args.workers or cpu_count(), len(process_args))

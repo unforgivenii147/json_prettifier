@@ -297,10 +297,17 @@ def _run_cli(argv, monkeypatch):
     import multiprocessing.pool
 
     class _InlinePool:
-        def __init__(self, *a, **kw): pass
-        def __enter__(self): return self
-        def __exit__(self, *a): return False
-        def map(self, fn, iterable): return [fn(x) for x in iterable]
+        def __init__(self, *a, **kw):
+            pass
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *a):
+            return False
+
+        def map(self, fn, iterable):
+            return [fn(x) for x in iterable]
 
     monkeypatch.setattr(jp, "Pool", _InlinePool)
     return jp.main(argv)

@@ -1,3 +1,4 @@
+.gitignore
 README.md
 setup.cfg
 setup.py
@@ -9,3 +10,4 @@ src/json_prettifier.egg-info/dependency_links.txt
 src/json_prettifier.egg-info/entry_points.txt
 src/json_prettifier.egg-info/top_level.txt
 tests/__init__.py
+tests/test_jb.py

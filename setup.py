@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="json_prettifier",
-    version="1.4.7",
+    version="1.4.9",
     author="Isaac Onsgh",
     author_email="adnanonagh@gmail.com",
     description="A fast JSON prettifier and minifier with multiprocessing support",
